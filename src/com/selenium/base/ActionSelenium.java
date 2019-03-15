@@ -112,6 +112,15 @@ public class ActionSelenium {
 		login_button.click();
 	}
 	
+	/**
+	 * webform表单提交
+	 * case：immoc登录页 
+	 * 特别说明：表单提交只会以get的形式提交到当前页面的URL，有些场景适合，有些场景不适合。
+	 * */
+	public void web_form(){
+		driver.findElement(By.id("signup-form")).submit();//调用submit方法，就是一个简单的表单提交
+	}
+	
 	
 	
 	
