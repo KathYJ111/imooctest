@@ -1,5 +1,6 @@
 package com.selenium.base;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.openqa.selenium.By;
@@ -7,8 +8,7 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-
-import com.gargoylesoftware.htmlunit.javascript.background.JavaScriptExecutor;
+import org.openqa.selenium.interactions.Actions;
 
 public class ActionSelenium {
 	public WebDriver driver;
@@ -118,10 +118,73 @@ public class ActionSelenium {
 	 * 特别说明：表单提交只会以get的形式提交到当前页面的URL，有些场景适合，有些场景不适合。
 	 * */
 	public void web_form(){
+		driver.get("xxxxxx");
 		driver.findElement(By.id("signup-form")).submit();//调用submit方法，就是一个简单的表单提交
 	}
-	
-	
+	/**
+	 * upfile文件上传
+	 * case:慕课网个人中心修改头像
+	 * 难点："更换头像"的文字会隐藏
+	 * 三种解决思路：1、用driver执行隐藏js修改源码的命令；2、模拟鼠标放在元素上，然后进行点击；3、借助autoit上传。
+	 * */
+	//方式一：用driver执行隐藏js修改源码的命令。
+	public void upfile_js(){
+		driver.get("https://www.imooc.com/user/setbindsns");
+		this.sleep(5000);//调用等待的方法
+		//用js命令将更换头像按钮设置为不隐藏
+		String js = "document.getElementsByClassName('update-avator'[0].style.bottom='0px';)";
+		JavascriptExecutor jscript = (JavascriptExecutor) driver;
+		jscript.executeScript(js);
+		this.sleep(2000);
+		driver.findElement(By.id("js-avator-link")).click();//点击更换头像按钮
+		driver.findElement(By.id("upload")).sendKeys("C:\\Users\\Administrator\\Desktop\\test.png");
+		driver.findElement(By.linkText("确定")).click();
+	}
+	//方式二：模拟鼠标放在头像上，然后进行点击；
+	//应用场景：上传头像的标签是input类型，直接通过sendkeys上传文件
+	//实现方法：调用手势操作类，将鼠标移动到头像上
+	public void upfile_mouse(){
+		driver.get("https://www.imooc.com/user/setbindsns");
+		this.sleep(3000);
+		WebElement header = driver.findElement(By.className("update-avator"));
+		Actions ac = new Actions(driver);
+		ac.moveToElement(header).perform();//将鼠标移动到头像上
+		driver.findElement(By.className("js-avator-link")).click();//点击更换头像按钮
+		driver.findElement(By.id("upload")).sendKeys("C:\\Users\\Administrator\\Desktop\\test.png");//定位上传元素的按钮，并通过sendkeys上传文件
+		driver.findElement(By.linkText("确定")).click();
+	}
+	//方式三：借助autoit上传
+	//应用场景：上传头像的标签如果不是input标签，就只能通过autoit工具上传
+	//实现方法：打开选择文件的弹框以后，通过autoIt工具实现头像上传
+	public void upfile_autoit(){
+		driver.get("https://www.imooc.com/user/setbindsns");
+		this.sleep(3000);
+		WebElement header = driver.findElement(By.className("updata-avator"));
+		Actions ac = new Actions(driver);
+		ac.moveToElement(header).perform();
+		driver.findElement(By.className("js-avator-link")).click();
+		driver.findElement(By.className("avator-btn-fake")).click();//点击上传头像的按钮，弹出文件选择框
+		//执行autoit命令文件，进行头像上传
+		try {
+			Runtime.getRuntime().exec("C:\\Users\\Administrator\\Desktop\\upfile.exe");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		driver.findElement(By.linkText("确定")).click();
+	}
+	/**
+	 * 封装等待时间的方法
+	 * */
+	public void sleep(int sleeptime){
+		try {
+			Thread.sleep(sleeptime);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
 	
 	
 	
