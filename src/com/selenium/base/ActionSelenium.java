@@ -9,6 +9,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.Select;
 
 public class ActionSelenium {
 	public WebDriver driver;
@@ -18,7 +19,7 @@ public class ActionSelenium {
 	public void InitDriver(){
 		System.setProperty("webdriver.chrome.driver", "C:/Users/Administrator/AppData/Local/Google/Chrome/Application/chromedriver.exe");
 		driver = new ChromeDriver();
-		String url = "www.imooc.com";
+		String url = "http://www.imooc.com";
 		driver.get(url);
 	}
 	/**
@@ -185,8 +186,34 @@ public class ActionSelenium {
 		}
 		
 	}
+	/**
+	 * 下拉框操作
+	 * case：慕课网个人中心页面，选择职业下拉框
+	 * */
+	public void downSelectBox(){
+		driver.get("http://www.imooc.com/user/setprofile");
+		driver.findElement(By.className("pull-right")).click();
+		this.sleep(3000);
+		WebElement formElement = driver.findElement(By.id("profile"));
+		WebElement job = formElement.findElement(By.id("job"));
+		Select downList = new Select(job);//selenium自带的select方法，仅用于select标签
+		//downList.selectByIndex(2);//通过index方法进行选择
+		//downList.selectByValue("1");//通过value方式进行定位
+		downList.selectByVisibleText("学生");//通过visibleText方式进行定位
+		downList.isMultiple();//判断是否是下拉多选列表
+		//获取当前下拉框所有值的内容，用于多选列表
+		List<WebElement> list = downList.getAllSelectedOptions();
+		for (WebElement options : list){
+			options.getText();
+		}
+		downList.getFirstSelectedOption();//获取当前下拉框的第一个值的内容
+	}
 	
-	
+	public static void main(String[] args) {
+		ActionSelenium as = new ActionSelenium();
+		as.InitDriver();
+//		as.InputBox();
+	}
 	
 	
 	
