@@ -1,5 +1,6 @@
 package com.selenium.base;
 
+import java.awt.event.ItemEvent;
 import java.io.IOException;
 import java.util.List;
 
@@ -207,6 +208,18 @@ public class ActionSelenium {
 			options.getText();
 		}
 		downList.getFirstSelectedOption();//获取当前下拉框的第一个值的内容
+	}
+	/**
+	 * 常用的鼠标操作：鼠标左击、鼠标双击、鼠标右击、鼠标悬停
+	 * */
+	public void mouseActions(){
+		WebElement login = driver.findElement(By.className("menuContent"));
+		List<WebElement> item = login.findElement(By.className("item"));
+		Actions ac = new Actions(driver);
+		ac.click(login).perform();//鼠标左击元素
+		ac.doubleClick(login).perform();//鼠标双击元素
+		ac.contextClick(login).perform();//鼠标右击元素
+		ac.moveToElement(item.get(0)).perform();//鼠标悬停在元素上
 	}
 	
 	public static void main(String[] args) {
