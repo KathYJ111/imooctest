@@ -210,7 +210,7 @@ public class ActionSelenium {
 		downList.getFirstSelectedOption();//获取当前下拉框的第一个值的内容
 	}
 	/**
-	 * 常用的鼠标操作：鼠标左击、鼠标双击、鼠标右击、鼠标
+	 * 常用的鼠标操作：鼠标左击、鼠标双击、鼠标右击、鼠标悬停
 	 * */
 	public void mouseActions(){
 		WebElement login = driver.findElement(By.className("menuContent"));
