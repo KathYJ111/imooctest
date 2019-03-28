@@ -3,6 +3,7 @@ package com.selenium.base;
 import java.awt.event.ItemEvent;
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -14,6 +15,7 @@ import org.openqa.selenium.support.ui.Select;
 
 public class ActionSelenium {
 	public WebDriver driver;
+	public String windowsHandle;
 	/**
 	 * 初始化driver
 	 * */
@@ -220,7 +222,33 @@ public class ActionSelenium {
 		ac.doubleClick(login).perform();//鼠标双击元素
 		ac.contextClick(login).perform();//鼠标右击元素
 		ac.moveToElement(item.get(0)).perform();//鼠标悬停在元素上
+		//获取当前窗口的信息
+		windowsHandle = driver.getWindowHandle();
+		driver.findElement(By.linkText("HTML/CSS")).click();
 	}
+	/**
+	 * windowsHandles窗口切换
+	 * */
+	public void windowsHandle(){
+		Set<String> handles = driver.getWindowHandles();//获取所有窗口的信息
+		for (String s:handles) {
+			if (s.equals(windowsHandle)){
+				continue;
+			}
+			System.out.println(s);
+			driver.switchTo().window(s);
+		}
+	}
+	/**
+	 * iframe富文本编辑框切换
+	 * */
+	public void iframe(){
+		driver.get("http://www.imooc.com/wiki/create");
+		WebElement iframeElement = driver.findElement(By.id("ueditor_0"));//先定位到iframe
+		driver.switchTo().frame(iframeElement);//再切换到iframe窗口
+		driver.findElement(By.tagName("body")).sendKeys("This is test.");
+	}
+	
 	
 	public static void main(String[] args) {
 		ActionSelenium as = new ActionSelenium();
