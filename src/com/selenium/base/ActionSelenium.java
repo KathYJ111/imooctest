@@ -4,6 +4,7 @@ import java.awt.event.ItemEvent;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -11,7 +12,9 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class ActionSelenium {
 	public WebDriver driver;
@@ -178,7 +181,7 @@ public class ActionSelenium {
 		driver.findElement(By.linkText("确定")).click();
 	}
 	/**
-	 * 封装等待时间的方法
+	 * 封装强制等待时间的方法
 	 * */
 	public void sleep(int sleeptime){
 		try {
@@ -187,7 +190,6 @@ public class ActionSelenium {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 	}
 	/**
 	 * 下拉框操作
@@ -248,6 +250,18 @@ public class ActionSelenium {
 		driver.switchTo().frame(iframeElement);//再切换到iframe窗口
 		driver.findElement(By.tagName("body")).sendKeys("This is test.");
 	}
+	/**
+	 * 等待函数三种：强制等待、显示等待、隐式等待
+	 * */
+	public void waitforElement(){
+		//隐式等待15s
+		driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
+		//显示等待20s，调用的是webdriver类
+		WebDriverWait wait = new WebDriverWait(driver, 20);//设置显示等待时间
+		wait.until(ExpectedConditions.presenceOfElementLocated(By.id("test")));//设置需要显示等待的元素
+	}
+	
+	
 	
 	
 	public static void main(String[] args) {
